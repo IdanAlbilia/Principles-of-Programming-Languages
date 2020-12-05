@@ -1,0 +1,38 @@
+<MainWindow>:
+    cols:1
+    location:location
+    time:time
+    places:places
+    GridLayout:
+        cols:1
+        size: root.width, root.height
+        GridLayout:
+            cols:2
+
+            Label:
+                text: "What is your current location?"
+            TextInput:
+                id: location
+                text: 'Oakland Ave'
+                multiline:False
+
+            Label:
+                text: "How much time would you like to spend?"
+            TextInput:
+                id: time
+                text:'5'
+                multiline:False
+
+            Label:
+                text: "How many location recommendations \n would you like to receive?"
+            TextInput:
+                id: places
+                text:'5'
+                multiline:False
+
+        Button:
+            background_color:[0, 1, 0, 1]
+            text: "Recommend me"
+            on_press: root.recommend()
+
+
