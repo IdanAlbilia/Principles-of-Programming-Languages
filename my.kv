@@ -1,0 +1,46 @@
+<MainWindow>:
+    location:location
+    time:time
+    places:places
+
+    GridLayout:
+        cols:1
+        size: root.width, root.height
+
+        GridLayout:
+            cols:2
+
+            Label:
+                text: "What is your current location?"
+            TextInput:
+                id: location
+                multiline:False
+
+            Label:
+                text: "How much time would you like to spend?"
+            TextInput:
+                id: time
+                multiline:False
+
+            Label:
+                text: "How many location recommendations \n          would you like to receive?"
+            TextInput:
+                id: places
+                multiline:False
+
+        Button:
+            on_press: root.recommend()
+
+            AsyncImage:
+                source: 'https://i0.wp.com/www.smartertravel.com/uploads/2017/06/road_trip_tips_hero.jpg?resize=1400%2C500&ssl=1.png'
+                y: self.parent.y + self.parent.height - 275
+                x: self.parent.x
+                size: self.parent.width, 250
+                allow_stretch: True
+
+                Label:
+                    y: 100
+                    size: self.parent.size
+                    color: 0,0,0.5,1
+                    text: "Recommend me"
+                    bold: 1
