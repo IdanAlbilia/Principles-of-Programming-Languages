@@ -7,7 +7,7 @@ class LocationMark(MapMarkerPopup):
     def __init__(self, **kwargs):
         self.location_name = kwargs.pop("name", "")
         super(MapMarkerPopup, self).__init__(**kwargs)
-        self.popup=None
+        self.popup = None
 
     def on_press(self):
         if not self.popup:
