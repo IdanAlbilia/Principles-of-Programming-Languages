@@ -1,5 +1,6 @@
 import sqlite3
 import pandas as pd
+import math
 
 
 class Database:
@@ -20,31 +21,38 @@ class Database:
                                          'Gender', 'TripDurationinmin'])
         try:
             df.to_sql(name='Trips', con=self.conn)
-        except:
+        except ValueError:
             print('Database already exists!')
 
         self.conn.commit()
         # conn.close()
 
-
-
     def get_start_location(self, start_location):
         """Get the rows with the same start location as our user's input"""
-        query = "SELECT StartStationName, EndStationName, TripDurationinmin ,EndStationLatitude, EndStationLongitude " \
-                " FROM Trips where StartStationName = '{0}'".format(start_location)
+        query = "SELECT StartStationName, EndStationName, AVG (TripDurationinmin) as TripDurationinmin ," \
+                " StartStationLatitude,StartStationLongitude, " \
+                "EndStationLatitude, EndStationLongitude " \
+                " FROM Trips where StartStationName = '{0}'" \
+                "GROUP by StartStationName, EndStationName  ".format(start_location)
         df = pd.read_sql_query(query, self.conn)
         return df
+
     '''Get the latitude and longitude coordinates of start location'''
+
     def get_location_lat_lon(self, start_location):
         query = "SELECT  StartStationLongitude, StartStationLatitude " \
                 " FROM Trips where StartStationName = '{0}'".format(start_location)
         df = pd.read_sql_query(query, self.conn)
+        if df.empty:
+            return None, None
         return df['StartStationLongitude'].iloc[0], df['StartStationLatitude'].iloc[0]
 
     def sort_by_time(self, trip_time, df):
         """Sort the data frame by trip time - take user's wished trip time in mind"""
-        df.loc[:, "TripDurationinmin"] = df["TripDurationinmin"].apply(lambda x: abs(x - trip_time))
-        results = df.sort_values(by='TripDurationinmin', ascending=True, )
+        df['Distance'] = df.apply(lambda x: math.sqrt((x["StartStationLongitude"] - x['EndStationLongitude']) ** 2
+                                                      + (x["StartStationLatitude"] - x['EndStationLatitude']) ** 2),axis=1)
+        df.loc[:, "TripDurationinmin"] = df["TripDurationinmin"].apply(lambda x: str(abs(x - int(trip_time))))
+        results = df.sort_values(by=['TripDurationinmin', 'Distance'], ascending=True, )
         return results
 
     def recommend_me(self, num_of_places, df):
@@ -54,17 +62,9 @@ class Database:
 
     def get_recommendation(self, start_location, trip_time, num_of_places):
         """A method that combines all of the 3 methods above, this method also interacts with the frontend."""
+        trip_time = int(trip_time)
+        num_of_places = int(num_of_places)
         df = self.get_start_location(start_location)
         df = self.sort_by_time(trip_time, df)
         df = self.recommend_me(num_of_places, df)
-        if df.empty:
-            print('The start location does not exist')
-            return
         return df
-#
-# db = Database()
-# res = db.get_recommendation('City Hall', 7, 7)
-# print(res)
-#
-# res_dct = {i:res[i] for i in range(0, len(res))}
-# print(res_dct)
