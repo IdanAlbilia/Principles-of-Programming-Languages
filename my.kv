@@ -1,4 +1,13 @@
 <MainWindow>:
+    #:set default_font_size "20sp"
+    #:import rgba kivy.utils.get_color_from_hex
+    canvas.before:
+        Color:
+            rgba: rgba('#8B8282')
+        Rectangle:
+            pos: self.pos
+            size: self.size
+            source: "Home-Page.jpg"
     cols:1
     location:location
     time:time
@@ -9,44 +18,58 @@
         size: root.width, root.height
         GridLayout:
 
+
             cols:2
+
             Label:
+                font_size:default_font_size
+                bold:True
                 text: "What is your current location?"
             TextInput:
                 id: location
-                text: 'City Hall'
+                text: ''
                 multiline:False
+                foreground_color: (0,0,0,1)
+                background_color: (1,1,1,0.4)
+                font_size:default_font_size
 
             Label:
-                size: self.texture_size
 
+                bold:True
+                font_size: default_font_size
                 text: "How much time would you like to spend?"
             TextInput:
                 id: time
-                text:'5'
+                text:''
                 multiline:False
+                foreground_color: (0,0,0,1)
+                background_color: (1,1,1,0.4)
+                font_size:default_font_size
 
             Label:
+                bold:True
+                font_size: default_font_size
                 text: "How many location recommendations \n would you like to receive?"
             TextInput:
                 id: places
-                text:'5'
+                text:''
                 multiline:False
-
+                font_size:default_font_size
+                foreground_color: (0,0,0,1)
+                background_color: (1,1,1,0.4)
+    AnchorLayout:
         Button:
             on_press: root.recommend()
-            AsyncImage:
-                source: 'https://i0.wp.com/www.smartertravel.com/uploads/2017/06/road_trip_tips_hero.jpg?resize=1400%2C500&ssl=1.png'
-                y: self.parent.y + self.parent.height - 275
-                x: self.parent.x
-                size: self.parent.width, 250
-                allow_stretch: True
+            size:115, 50
+            background_normal: ''
+            size_hint: None, None
+            pos: 350 ,100
+            text: "Submit"
+            font_size: "28sp"
+            bold:True
+            background_color: rgba("#0098E4")
 
-                Label:
-                    y: 100
-                    size: self.parent.size
-                    color: 0,0,0.5,1
-                    text: "Recommend me"
-                    bold: 1
+
+
 
 

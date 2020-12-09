@@ -9,7 +9,6 @@ from MapWidget.MapWidget import MapWidget
 
 class MainWindow(GridLayout):
     """A class that basically runs the Gui."""
-
     db = Database()
     location = ObjectProperty(None)
     time = ObjectProperty(None)
@@ -23,7 +22,8 @@ class MainWindow(GridLayout):
             self.popup(Label(text='You must enter current location, time to travel and number of recommendations  '),
                        'Error')
             return
-        start_point = self.location.text.strip()
+        # The .title() method capitalize first letter of each word
+        start_point = self.location.text.strip().title()
         trip_duration = self.time.text
         recommendations_number = self.places.text
         lon, lat = Database.get_location_lat_lon(self.db, start_point)
@@ -35,8 +35,8 @@ class MainWindow(GridLayout):
             self.popup(MapWidget(marks=results, start_location_lat=lat, start_location_lon=lon),
                        'Recommended Locations', (600, 600))
         except ValueError:
-            self.popup(Label(text='Please enter numbers only for Trip duration and Number of Recommendations'), 'Error')
-
+            self.popup(Label(text='Please enter positive numbers for Trip duration and Number of Recommendations'), 'Error')
+        # clean the text input
         self.location.text = ""
         self.time.text = ""
         self.places.text = ""

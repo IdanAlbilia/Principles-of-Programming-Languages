@@ -10,6 +10,9 @@ __pycache__/
 database.db
 *.csv
 
+#word
+*.docx
+
 #pych
 .idea/
 cache/

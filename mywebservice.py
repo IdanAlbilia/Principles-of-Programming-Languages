@@ -1,31 +1,28 @@
-import sqlite3
-from flask import Flask, request
-from flask import jsonify
+from flask import Flask
 from flask import request
 import json
-from flask_restful import Api, Resource
+from flask_restful import Api
 from mybackend import Database
 
 app = Flask(__name__)
 api = Api(app)
+"""This class is web service that communicates with the database"""
 
 
 @app.route('/')
 def get():
     """Creates a get api request - returns json of the locations that we recommend for the user"""
-    startlocation = request.args.get('startlocation')
-    timeduration = request.args.get('timeduration')
+    start_location = request.args.get('startlocation')
+    time_duration = request.args.get('timeduration')
     k = request.args.get('k')
     db = Database()
     try:
-        res = db.get_recommendation(startlocation, timeduration, k)
+        res = db.get_recommendation(start_location, time_duration, k)
         res = list(res['EndStationName'])
         json_string = json.dumps(res)
         return json_string
     except ValueError:
-        return json.dumps("error: timeduration must be a number and k must be a integer number")
-
-
+        return json.dumps("error: timeduration and k must be a positive number ")
 
 
 if __name__ == '__main__':

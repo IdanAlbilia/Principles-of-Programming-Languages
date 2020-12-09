@@ -5,9 +5,9 @@ from MapWidget.LocationMark import LocationMark
 
 
 class MapWidget(AnchorLayout):
-    '''' This class represent of map widget heritage from anchor Layout that contains
-     mapview-Mapview is a Kivy widget for displaying interactive map
-           '''
+    """' This class represent of map widget heritage from anchor Layout that contains
+     mapview-Mapview is a Kivy widget for displaying interactive map https://pypi.org/project/kivy-garden.mapview/
+           """
 
     def __init__(self, **kwargs):
         # marks -> the locations recommends
